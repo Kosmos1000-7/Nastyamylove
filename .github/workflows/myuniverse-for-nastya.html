@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Космическая любовь для Насти</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 3s ease-out;
+        }
+
+        .title {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+            color: #ff99cc;
+        }
+
+        .message {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .orbit-container {
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .sun {
+            width: 40px;
+            height: 40px;
+            background: gold;
+            border-radius: 50%;
+            position: absolute;
+            top: 80px;
+            left: 80px;
+            box-shadow: 0 0 20px gold;
+        }
+
+        .planet {
+            width: 20px;
+            height: 20px;
+            background: #ff69b4;
+            border-radius: 50%;
+            position: absolute;
+            animation: orbit 12s linear infinite;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+            to   { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .timer {
+            margin-top: 30px;
+            font-size: 1.4em;
+            color: #ffd1dc;
+        }
+
+        audio {
+            display: none;
+        }
+    
+        @media screen and (max-width: 600px) {
+            .title {
+                font-size: 1.5em;
+            }
+            .message {
+                font-size: 1em;
+                padding: 10px;
+            }
+            .timer {
+                font-size: 1.1em;
+            }
+            .secret {
+                font-size: 1em;
+                margin-top: 20px;
+                color: #ffaec9;
+            }
+        }
+
+        .secret {
+            font-size: 1.2em;
+            margin-top: 20px;
+            color: #ffaec9;
+            animation: fadeIn 5s ease-out infinite alternate;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="stars"></canvas>
+    <div class="center">
+        <div class="title">Привет, Настя 💫</div>
+        <div class="message">
+            В этой бесконечной вселенной ты — моя единственная звезда.<br>
+            Я думаю о тебе каждый день.<br>
+            Вскоре мы увидимся, и всё станет на свои места.<br><br>
+            С любовью, Денис ❤️
+        </div>
+        <div class="timer" id="timer">Загрузка таймера...</div>
+<div class="secret">Я люблю тебя, Настя 💖</div>
+    </div>
+
+    <div class="orbit-container">
+        <div class="sun"></div>
+        <div class="planet"></div>
+    </div>
+
+    <audio autoplay loop>
+        <source src="romantic-space.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Звезды
+        const canvas = document.getElementById("stars");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let stars = Array(300).fill().map(() => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5
+        }));
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            stars.forEach(s => {
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+            requestAnimationFrame(drawStars);
+        }
+
+        drawStars();
+
+        // Таймер
+        const countdown = document.getElementById("timer");
+        const targetDate = new Date("2026-12-09T00:00:00");
+
+        function updateTimer() {
+            const now = new Date();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                countdown.innerText = "Сегодня наша встреча! 💖";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            countdown.innerText = `До нашей встречи осталось: ${days}д ${hours}ч ${minutes}м ${seconds}с`;
+        }
+
+        setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>
